@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import db from "@/net/db";
 
-export default function article() {
+export default function Article() {
   const router = useRouter();
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
