@@ -9,7 +9,6 @@ import {
   orderBy,
   query,
 } from 'firebase/firestore';
-import { DateTime } from 'luxon';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -62,9 +61,10 @@ export default function Articles({ params }: Params) {
           </button> */}
         </>
       </ul>
+
       <div className='mb-8 w-full flex justify-end'>
-        <Link href='/create'>
-          <button className='border p-2 bg-black text-white'>글쓰기</button>
+        <Link href={`/articles/${finalData?.id}/edit`}>
+          <button className='btn-primary'>수정하기</button>
         </Link>
       </div>
     </BaseLayout>

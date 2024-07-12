@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import BaseLayout from "@/components/BaseLayout";
-import Link from "next/link";
-import db from "@/net/db";
+import BaseLayout from '@/components/BaseLayout';
+import db from '@/net/db';
 import {
   collection,
   getDocs,
   onSnapshot,
   orderBy,
   query,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { DateTime } from "luxon";
+} from 'firebase/firestore';
+import { DateTime } from 'luxon';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // Firestore 문서 데이터 타입 정의
 interface Article {
@@ -40,7 +40,7 @@ export default function Home() {
     return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
   }, []);
   return (
-<BaseLayout>
+    <BaseLayout>
       <ul>
         <li className='flex flex-row w-full border-b p-2 mb-4'>
           <div className='flex-1 font-bold'>제목</div>
@@ -55,7 +55,7 @@ export default function Home() {
             <div className='w-64'>{item.author}</div>
             <div className='w-64'>
               {DateTime.fromMillis(item.created_at).toFormat(
-                "yyyy-LL-dd HH:mm:ss"
+                'yyyy-LL-dd HH:mm:ss'
               )}
             </div>
           </li>
