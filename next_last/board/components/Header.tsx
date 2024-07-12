@@ -1,10 +1,15 @@
-"use client";
+'use client';
 
-import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
-import auth from '@/net/auth'; // auth의 타입이 올바르게 정의되어 있어야 합니다.
-import { useEffect, useState } from 'react';
+import auth from '@/net/auth';
+import {
+  onAuthStateChanged,
+  signOut,
+  User as FirebaseUser,
+} from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+// auth의 타입이 올바르게 정의되어 있어야 합니다.
+import { useEffect, useState } from 'react';
 
 export default function Header() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
@@ -19,15 +24,17 @@ export default function Header() {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      router.push("/sign-in"); // 로그아웃 후 로그인 페이지로 이동
+      router.push('/sign-in'); // 로그아웃 후 로그인 페이지로 이동
     } catch (error) {
-      console.error("로그아웃 중 에러 발생:", error);
+      console.error('로그아웃 중 에러 발생:', error);
     }
   };
 
   return (
     <header className='mb-9 border-b border-gray-400 p-3 flex justify-between items-center'>
-      <div className='text-xl font-bold'>QuantumJump NoticeBoard</div>
+      <Link href='/' className='text-xl font-bold'>
+        QuantumJump NoticeBoard
+      </Link>
       <div className='flex items-center'>
         {user ? (
           <button

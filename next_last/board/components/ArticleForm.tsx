@@ -19,20 +19,43 @@ export default function ArticleForm({ initialValues }: ArticleFormProps) {
   const [subject, setSubject] = useState<string>(initialValues?.subject || '');
   const [content, setContent] = useState<string>(initialValues?.content || '');
   const [user, setUser] = useState<User | null>(null);
+  const [errors, setErrors] = useState<{ subject?: string; content?: string }>(
+    {}
+  );
   const router = useRouter();
 
   const submit = async () => {
+    let newErrors: { subject?: string; content?: string } = {};
+
+    if (!subject.trim()) {
+      newErrors.subject = '제목을 입력하세요.';
+    }
+    if (!content.trim()) {
+      newErrors.content = '내용을 입력하세요.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     if (user) {
-      await addDoc(collection(db, 'articles'), {
-        subject,
-        content,
-        author: user.email,
-        created_at: new Date().getTime(),
-      });
-      alert('저장되었습니다.');
-      setSubject('');
-      setContent('');
-      router.push('/');
+      try {
+        await addDoc(collection(db, 'articles'), {
+          subject,
+          content,
+          author: user.email,
+          created_at: new Date().getTime(),
+        });
+        alert('저장되었습니다.');
+        setSubject('');
+        setContent('');
+        setErrors({}); // 모든 입력이 성공하면 에러 초기화
+        router.push('/');
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        alert('게시글 작성 중 오류가 발생했습니다.');
+      }
     } else {
       alert('사용자가 인증되지 않았습니다.');
     }
@@ -59,8 +82,15 @@ export default function ArticleForm({ initialValues }: ArticleFormProps) {
             type='text'
             placeholder='제목을 입력하세요.'
             value={subject}
-            onChange={(event) => setSubject(event.target.value)}
+            onChange={(event) => {
+              setSubject(event.target.value);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                subject: undefined,
+              }));
+            }}
           />
+          {errors.subject && <p className='text-red-500'>{errors.subject}</p>}
         </div>
 
         <div className='mb-4'>
@@ -68,8 +98,15 @@ export default function ArticleForm({ initialValues }: ArticleFormProps) {
             className='border-b w-full'
             placeholder='내용을 입력하세요.'
             value={content}
-            onChange={(event) => setContent(event.target.value)}
+            onChange={(event) => {
+              setContent(event.target.value);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                content: undefined,
+              }));
+            }}
           ></textarea>
+          {errors.content && <p className='text-red-500'>{errors.content}</p>}
         </div>
         <div>
           <button className='border p-2' type='button' onClick={submit}>

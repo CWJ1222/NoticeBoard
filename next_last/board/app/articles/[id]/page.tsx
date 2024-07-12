@@ -4,12 +4,14 @@ import BaseLayout from '@/components/BaseLayout';
 import db from '@/net/db';
 import {
   collection,
-  getDocs,
+  deleteDoc,
+  doc,
   onSnapshot,
   orderBy,
   query,
 } from 'firebase/firestore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 // Firestore 문서 데이터 타입 정의
@@ -25,6 +27,8 @@ interface Article {
 type Params = { params: { id: string } };
 export default function Articles({ params }: Params) {
   const [list, setList] = useState<Article[]>([]);
+  const router = useRouter();
+
   useEffect(() => {
     const q = query(collection(db, 'articles'), orderBy('created_at', 'desc'));
     const unsubscribe = onSnapshot(q, (results) => {
@@ -41,32 +45,41 @@ export default function Articles({ params }: Params) {
 
     return () => unsubscribe(); // 컴포넌트 언마운트 시 구독 해제
   }, []);
-  console.log(list);
+
   const finalData = list.find((object: Article) => object.id === params.id);
-  console.log(finalData);
-  console.log(params.id);
+
+  const handleDelete = async () => {
+    if (!finalData || !finalData.id) return;
+
+    const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+    if (!confirmDelete) return;
+
+    try {
+      const docRef = doc(db, 'articles', finalData.id);
+      await deleteDoc(docRef);
+      router.push('/'); // 삭제 후 메인 페이지로 이동
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+    }
+  };
+
   return (
     <BaseLayout>
       <ul>
         <>
           <h1>게시글</h1>
           <h1>제목: {finalData?.subject}</h1>
-          <h2>작성자:{finalData?.author}</h2>
-          <h3>내용: {finalData?.content}</h3>
-          {/* <button onClick={update} className='btn-primary'>
-            수정하기
-          </button>
-          <button onClick={Boarddelete} className='btn-danger'>
-            삭제하기
-          </button> */}
+          <h2>작성자: {finalData?.author}</h2>
+          <h3>내용:</h3>
+          <div className='border border-solid'>{finalData?.content}</div>
+          <div className='mb-8 w-full flex justify-end'>
+            <Link href={`/articles/${finalData?.id}/edit`}>
+              <button>수정하기</button>
+            </Link>
+            <button onClick={handleDelete}>삭제하기</button>
+          </div>
         </>
       </ul>
-
-      <div className='mb-8 w-full flex justify-end'>
-        <Link href={`/articles/${finalData?.id}/edit`}>
-          <button className='btn-primary'>수정하기</button>
-        </Link>
-      </div>
     </BaseLayout>
   );
 }
