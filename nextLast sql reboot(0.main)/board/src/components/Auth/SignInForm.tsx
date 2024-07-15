@@ -19,8 +19,10 @@ const SignInForm = () => {
     });
 
     if (res.ok) {
-      await reloadUser();
-      router.push('/board');
+    await reloadUser();
+      router.push('/board').then(() => {
+        window.location.reload(); // Refresh the page after redirecting to the board page
+      });
     } else {
       console.error('Failed to sign in');
     }
