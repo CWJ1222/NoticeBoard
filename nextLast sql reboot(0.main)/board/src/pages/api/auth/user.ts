@@ -16,7 +16,7 @@ const handler = async (req: AuthenticatedRequest, res: NextApiResponse) => {
   }
 
   try {
-    const [rows]: [any[], any] = await connection.query('SELECT email, coin, created_at FROM users WHERE id = ?', [userId]);
+    const [rows]: [any[], any] = await connection.query('SELECT email, nickname, coin, created_at FROM users WHERE id = ?', [userId]);
     if (rows.length > 0) {
       res.status(200).json(rows[0]);
     } else {

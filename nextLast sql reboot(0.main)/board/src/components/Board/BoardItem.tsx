@@ -2,14 +2,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useAuth from '../../hooks/useAuth';
 import { Post } from '@/types/Post';
-
-// interface Post {
-//   id: string;
-//   title: string;
-//   content: string;
-//   coin: number;
-// }
-
 interface BoardItemProps {
   post: Post;
 }
@@ -22,15 +14,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
   const [content, setContent] = useState(post.content);
   const [coin, setCoin] = useState(post.coin);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCoin((prevCoin: number) => Math.max(0, prevCoin - 1));
-  //   }, 6000); // 600,000 ms = 10 minutes
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  const handleDelete = async () => {
+   const handleDelete = async () => {
     const res = await fetch('/api/board/deletePost', {
       method: 'DELETE',
       headers: {
