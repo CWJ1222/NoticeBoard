@@ -1,15 +1,18 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import connection from '../../../utils/db';
-import authMiddleware from '../../../middleware/authMiddleware';
-import { ResultSetHeader } from 'mysql2';
 import { JwtPayload } from 'jsonwebtoken';
+import { ResultSetHeader } from 'mysql2';
+import { NextApiRequest, NextApiResponse } from 'next';
+import authMiddleware from '../../../middleware/authMiddleware';
+import connection from '../../../utils/db';
 
 // Extended type to include user with string id
 interface AuthenticatedNextApiRequest extends NextApiRequest {
   user?: JwtPayload & { id: string };
 }
 
-const handler = async (req: AuthenticatedNextApiRequest, res: NextApiResponse) => {
+const handler = async (
+  req: AuthenticatedNextApiRequest,
+  res: NextApiResponse
+) => {
   if (req.method === 'DELETE') {
     const { id } = req.body;
 
@@ -21,10 +24,15 @@ const handler = async (req: AuthenticatedNextApiRequest, res: NextApiResponse) =
     const userId = req.user.id;
 
     try {
-      const [result] = await connection.query<ResultSetHeader>('DELETE FROM posts WHERE id = ? AND user_id = ?', [id, userId]);
+      const [result] = await connection.query<ResultSetHeader>(
+        'DELETE FROM posts WHERE id = ? AND user_id = ?',
+        [id, userId]
+      );
 
       if (result.affectedRows === 0) {
-        res.status(404).json({ message: 'Post not found or user not authorized' });
+        res
+          .status(404)
+          .json({ message: 'Post not found or user not authorized' });
       } else {
         res.status(200).json({ message: 'Post deleted' });
       }
