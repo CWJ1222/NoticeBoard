@@ -18,9 +18,11 @@ const SignInForm = () => {
       body: JSON.stringify({ email, password }),
     });
 
-    if (res.ok) {
+   if (res.ok) {
       await reloadUser();
-      router.push('/board');
+      router.push('/board').then(() => {
+        window.location.reload(); // Refresh the page after redirecting to the board page
+      });
     } else {
       console.error('Failed to sign in');
     }
