@@ -21,7 +21,9 @@ const SignInForm = () => {
     if (res.ok) {
       await reloadUser();
       alert('로그인이 완료되었습니다.');
-      router.push('/board');
+      router.push('/board').then(() => {
+        window.location.reload();
+      });
     } else {
       alert('등록된 회원이 아니거나 잘못 입력하였습니다.');
       console.error('Failed to sign in');
