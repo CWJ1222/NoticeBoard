@@ -29,6 +29,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
         alert('게시글이 삭제되었습니다.');
         router.reload();
       } else {
+        alert('본인이 작성한 게시글만 삭제할 수 있습니다.');
         console.error('Failed to delete the post');
       }
     }
@@ -48,6 +49,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
       setIsEditing(false);
       router.reload();
     } else {
+      alert('본인이 작성한 게시글만 수정할 수 있습니다.');
       console.error('Failed to update the post');
     }
   };
