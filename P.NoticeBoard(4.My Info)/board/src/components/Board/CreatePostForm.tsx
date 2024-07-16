@@ -5,7 +5,7 @@ const CreatePostForm = () => {
   const isAuthenticated = useAuth();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [coin, setCoin] = useState(); // Default coin value
+  const [coin, setCoin] = useState(0); // Default coin value
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
