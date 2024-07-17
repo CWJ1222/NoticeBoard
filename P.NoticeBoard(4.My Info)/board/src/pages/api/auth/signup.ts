@@ -8,8 +8,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!nickname) {
       return res.status(400).json({ message: 'Nickname is required' });
     }
-    const hashedPassword = await hashPassword(password);
     try {
+      // 이메일 중복 확인
+      const [existingUser] = await connection.query(
+        'SELECT * FROM users WHERE email = ?',
+        [email]
+      );
+
+      if (existingUser.length > 0) {
+        return res.status(409).json({ message: 'Email already exists' });
+      }
+
+      const hashedPassword = await hashPassword(password);
       await connection.query(
         'INSERT INTO users (email, nickname, password, coin) VALUES (?, ?, ?, ?)',
         [email, nickname, hashedPassword, 0]

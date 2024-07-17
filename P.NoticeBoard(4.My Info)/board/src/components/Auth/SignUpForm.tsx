@@ -7,8 +7,10 @@ const SignUpForm = () => {
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!nickname) {
       setError('Nickname is required');
       return;
@@ -20,14 +22,20 @@ const SignUpForm = () => {
       },
       body: JSON.stringify({ email, password, nickname }),
     });
+
     if (res.ok) {
       alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.');
       router.push('/signin');
     } else {
       const data = await res.json();
-      setError(data.message || 'Failed to sign up');
+      if (res.status === 409) {
+        alert('이미 등록된 이메일입니다.');
+      } else {
+        setError(data.message || 'Failed to sign up');
+      }
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -58,7 +66,7 @@ const SignUpForm = () => {
         className='border p-2'
         required
       />
-      <button type='submit' className='bg-blue-500 text-white px-2 py-2 rounded'>
+      <button type='submit' className='bg-blue-500 text-white p-2'>
         Sign Up
       </button>
     </form>
