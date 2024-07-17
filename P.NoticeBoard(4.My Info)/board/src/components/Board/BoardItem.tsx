@@ -71,39 +71,44 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
           />
           <button
             onClick={handleEdit}
-            className='bg-blue-500 text-white p-2 mr-2'
+            className='bg-blue-500 text-white px-1 py-0.5 mr-2 text-sm rounded'
           >
             Save
           </button>
           <button
             onClick={() => setIsEditing(false)}
-            className='bg-gray-500 text-white p-2'
+            className='bg-gray-500 text-white px-1 py-0.5 text-sm rounded'
           >
             Cancel
           </button>
         </div>
       ) : (
         <div>
-          <h2 className='text-xl font-bold'>{post.title}</h2>
-          <p>{post.content}</p>
-          <p>Coins: {coin}</p>
-          {isAuthenticated && (
-            <div>
-              <button
-                onClick={() => setIsEditing(true)}
-                className='bg-yellow-500 text-white p-2 mr-2'
-              >
-                Edit
-              </button>
-              <button
-                onClick={handleDelete}
-                className='bg-red-500 text-white p-2'
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
+  <p className="text-sm text-gray-500"><strong>Created at:</strong> {new Date(post.created_at).toLocaleString()}</p>
+  <div className='flex justify-between items-center mt-2'>
+    <div>
+      <h2 className='text-l font-bold'>{post.title}</h2>
+      <p className='text-m'>{post.content}</p>
+    </div>
+    <p>Coins: {coin}</p>
+  </div>
+  {isAuthenticated && (
+    <div className='flex justify-end mt-2'>
+      <button
+        onClick={() => setIsEditing(true)}
+        className='bg-yellow-500 text-white px-1 py-0.5 mr-2 text-sm rounded'
+      >
+        Edit
+      </button>
+      <button
+        onClick={handleDelete}
+        className='bg-red-500 text-white px-1 py-0.5 text-sm rounded'
+      >
+        Delete
+      </button>
+    </div>
+  )}
+</div>
       )}
     </div>
   );
