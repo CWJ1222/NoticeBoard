@@ -28,28 +28,28 @@ const Header = () => {
             <div className='relative'>
               <button
                 onClick={() => setShowInfo((prev) => !prev)}
-                className='bg-blue-500 text-white px-2 py-2 rounded'
+                className='bg-blue-500 text-white px-2 py-1 rounded'
               >
                 My Info
               </button>
               {showInfo && (
-                <div className='absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg p-4'>
-                  <p>
+                <div className='absolute right-0 mt-2 w-60 bg-white text-black rounded shadow-lg p-4'>
+                  <p class="text-xs">
                     <strong>Email:</strong> {user.email}
                   </p>
-                  <p>
+                  <p class="text-xs">
                     <strong>Nickname:</strong> {user.nickname}
                   </p>
-                  <p>
+                  <p class="text-xs">
                     <strong>Coins:</strong> {user.coin}
                   </p>
-                  <p>
+                  <p class="text-xs">
                     <strong>Joined:</strong>{' '}
-                    {new Date(user.created_at).toLocaleDateString()}
+                    {new Date(user.created_at).toLocaleString()}
                   </p>
                   <button
                     onClick={handleSignOut}
-                    className='bg-red-500 text-white px-4 py-2 rounded mt-2'
+                    className='bg-red-500 text-white px-2 py-1 rounded mt-2'
                   >
                     Sign Out
                   </button>
