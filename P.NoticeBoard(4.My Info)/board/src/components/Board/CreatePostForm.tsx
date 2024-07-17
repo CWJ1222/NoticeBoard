@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 
 const CreatePostForm = () => {
-  const isAuthenticated = useAuth();
+  const { user } = useAuth(); // user 객체 사용
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [coin, setCoin] = useState(0); // Default coin value
@@ -11,8 +11,19 @@ const CreatePostForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!user) {
+      alert('로그인 후 이용 가능합니다.');
+      return;
+    }
+
     if (!title.trim() || !content.trim()) {
       setErrorMessage('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    if (coin > user.coin) {
+      // 보유 코인 확인
+      alert('보유 코인을 초과하였습니다.');
       return;
     }
 
@@ -29,8 +40,6 @@ const CreatePostForm = () => {
       window.location.reload(); // Refresh the page after creating a post
     }
   };
-
-  if (!isAuthenticated) return null;
 
   return (
     <form onSubmit={handleSubmit} className='mb-4'>
