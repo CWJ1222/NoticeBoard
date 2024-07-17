@@ -20,7 +20,7 @@ const Header = () => {
             <a className='text-xl font-bold mr-4'>NoticeBoard</a>
           </Link>
           <Link href='/board' legacyBehavior>
-            <a className='mr-4'>Board</a>
+            <a className='mr-4' style={{ color: 'yellow' }}>Board</a>
           </Link>
         </div>
         <div className='flex items-center'>
@@ -28,7 +28,7 @@ const Header = () => {
             <div className='relative'>
               <button
                 onClick={() => setShowInfo((prev) => !prev)}
-                className='bg-blue-500 text-white px-4 py-2 rounded'
+                className='bg-blue-500 text-white px-2 py-2 rounded'
               >
                 My Info
               </button>

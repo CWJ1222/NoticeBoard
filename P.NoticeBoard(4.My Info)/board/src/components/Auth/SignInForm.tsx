@@ -49,7 +49,7 @@ const SignInForm = () => {
         placeholder='Password'
         className='border p-2'
       />
-      <button type='submit' className='bg-blue-500 text-white p-2'>
+      <button type='submit' className='bg-orange-600 text-white p-2 px-1 py-0.5 rounded'>
         Sign In
       </button>
     </form>

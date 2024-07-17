@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import BoardItem from './BoardItem';
 
 interface Post {
-  id: number;
+  id: number; 
   title: string;
   content: string;
   coin: number;
+  created_at: string;
 }
 
 const BoardList = () => {
