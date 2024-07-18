@@ -77,8 +77,9 @@ const Header = () => {
                   </p>
                   <p class="text-xs">
                     <strong>Joined:</strong>{''}
-                    {new Date(user.created_at).toLocaleString()}
-                  </p>
+        {new Date(
+              new Date(user.created_at).getTime() + 9 * 60 * 60 * 1000
+            ).toLocaleString('ko-KR')}                  </p>
                   <button
                     onClick={handleSignOut}
                     className='bg-red-500 text-white px-2 py-1 rounded mt-2'
