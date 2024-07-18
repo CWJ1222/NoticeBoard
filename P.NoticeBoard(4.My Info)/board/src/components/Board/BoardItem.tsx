@@ -1,8 +1,16 @@
-import { Post } from '@/types/Post';
+// import { Post } from '@/types/Post';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  coin: number;
+  created_at: string;
+  author?: string;
+}
 interface BoardItemProps {
   post: Post;
 }
@@ -14,6 +22,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
   const [coin, setCoin] = useState(post.coin);
+  const { user, signOut } = useAuth();
 
   const handleDelete = async () => {
     if (confirm('정말 삭제하시겠습니까?')) {
@@ -53,7 +62,14 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
       console.error('Failed to update the post');
     }
   };
-
+  interface User {
+    nickname?: string;
+    id: number;
+    password: string;
+    email: string;
+    coin?: number;
+    created_at?: string;
+  }
   return (
     <div className='border p-4 mb-4'>
       {isEditing ? (
@@ -95,7 +111,10 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
               <h2 className='text-l font-bold'>{post.title}</h2>
               <p className='text-m'>{post.content}</p>
             </div>
-            <p>Coins: {coin}</p>
+            <div>
+              <p className='text-sm text-gray-500'>Nickname: {post.author}</p>
+              <p>Coins: {coin}</p>
+            </div>
           </div>
           {isAuthenticated && (
             <div className='flex justify-end mt-2'>
