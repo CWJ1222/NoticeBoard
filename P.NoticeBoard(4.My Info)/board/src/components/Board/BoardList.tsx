@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import BoardItem from './BoardItem';
 
 interface Post {
-  id: number; 
+  id: number;
   title: string;
   content: string;
   coin: number;
@@ -37,6 +37,8 @@ const BoardList = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  console.log(posts);
 
   // 페이지별 포스트 배열 계산
   const sortedPosts = posts.sort((a, b) =>
