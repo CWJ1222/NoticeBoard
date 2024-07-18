@@ -31,28 +31,35 @@ const SignInForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='flex flex-col items-center space-y-4'
-    >
-      <input
-        type='email'
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder='Email'
-        className='border p-2'
-      />
-      <input
-        type='password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder='Password'
-        className='border p-2'
-      />
-      <button type='submit' className='bg-orange-600 text-white p-2 px-1 py-0.5 rounded'>
-        Sign In
-      </button>
-    </form>
+    <div className='min-h-screen flex items-center justify-center'>
+      <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md'>
+        <h2 className='text-2xl font-bold mb-6 text-center'>Sign In</h2>
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <input
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='Email'
+            className='w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-blue-500'
+            required
+          />
+          <input
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
+            className='w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:border-blue-500'
+            required
+          />
+          <button
+            type='submit'
+            className='w-full bg-orange-600 text-white p-3 rounded-lg hover:bg-orange-500 transition-colors'
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
