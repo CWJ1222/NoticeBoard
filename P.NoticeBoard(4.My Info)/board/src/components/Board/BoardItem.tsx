@@ -14,7 +14,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
   const [coin, setCoin] = useState(post.coin);
-  const { user, signOut } = useAuth<User>();
+  const { user, signOut } = useAuth();
 
   const handleDelete = async () => {
     if (confirm('정말 삭제하시겠습니까?')) {
@@ -104,9 +104,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
               <p className='text-m'>{post.content}</p>
             </div>
             <div>
-              <p className='text-sm text-gray-500'>
-                Nickname: {user ? (user.nickname ? user.nickname : '') : ''}
-              </p>
+              <p className='text-sm text-gray-500'>Nickname:</p>
               <p>Coins: {coin}</p>
             </div>
           </div>
