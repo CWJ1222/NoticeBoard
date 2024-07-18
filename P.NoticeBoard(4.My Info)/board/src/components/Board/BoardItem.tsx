@@ -1,8 +1,16 @@
-import { Post } from '@/types/Post';
+// import { Post } from '@/types/Post';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  coin: number;
+  created_at: string;
+  author?: string;
+}
 interface BoardItemProps {
   post: Post;
 }
@@ -104,7 +112,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
               <p className='text-m'>{post.content}</p>
             </div>
             <div>
-              <p className='text-sm text-gray-500'>Nickname:</p>
+              <p className='text-sm text-gray-500'>Nickname: {post.author}</p>
               <p>Coins: {coin}</p>
             </div>
           </div>
