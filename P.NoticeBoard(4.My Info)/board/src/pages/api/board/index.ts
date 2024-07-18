@@ -2,14 +2,24 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import connection from '../../../utils/db';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'GET') {
-    const conn = await connection.getConnection();
-    const [rows] = await conn.query('SELECT * FROM posts ORDER BY created_at DESC');
+  const { query } = req.query;
 
+  try {
+    let sql = 'SELECT posts.id, posts.title, posts.content, posts.coin, posts.created_at, users.nickname AS author FROM posts JOIN users ON posts.user_id = users.id';
+    let params = [];
+
+    if (query) {
+      sql += ' WHERE posts.title LIKE ? OR posts.content LIKE ?';
+      const likeQuery = `%${query}%`;
+      params = [likeQuery, likeQuery];
+    }
+
+    sql += ' ORDER BY posts.created_at DESC';
+
+    const [rows] = await connection.query(sql, params);
     res.status(200).json(rows);
-    conn.release();
-  } else {
-    res.status(405).json({ message: 'Method not allowed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

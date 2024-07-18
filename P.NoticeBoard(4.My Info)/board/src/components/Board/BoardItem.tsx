@@ -84,31 +84,36 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
         </div>
       ) : (
         <div>
-  <p className="text-sm text-gray-500"><strong>Created at:</strong> {new Date(post.created_at).toLocaleString()}</p>
-  <div className='flex justify-between items-center mt-2'>
-    <div>
-      <h2 className='text-l font-bold'>{post.title}</h2>
-      <p className='text-m'>{post.content}</p>
-    </div>
-    <p>Coins: {coin}</p>
-  </div>
-  {isAuthenticated && (
-    <div className='flex justify-end mt-2'>
-      <button
-        onClick={() => setIsEditing(true)}
-        className='bg-yellow-500 text-white px-1 py-0.5 mr-2 text-sm rounded'
-      >
-        Edit
-      </button>
-      <button
-        onClick={handleDelete}
-        className='bg-red-500 text-white px-1 py-0.5 text-sm rounded'
-      >
-        Delete
-      </button>
-    </div>
-  )}
-</div>
+          <p className='text-sm text-gray-500'>
+            <strong>Created at:</strong>
+            {new Date(
+              new Date(post.created_at).getTime() + 9 * 60 * 60 * 1000
+            ).toLocaleString('ko-KR')}
+          </p>
+          <div className='flex justify-between items-center mt-2'>
+            <div>
+              <h2 className='text-l font-bold'>{post.title}</h2>
+              <p className='text-m'>{post.content}</p>
+            </div>
+            <p>Coins: {coin}</p>
+          </div>
+          {isAuthenticated && (
+            <div className='flex justify-end mt-2'>
+              <button
+                onClick={() => setIsEditing(true)}
+                className='bg-yellow-500 text-white px-1 py-0.5 mr-2 text-sm rounded'
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className='bg-red-500 text-white px-1 py-0.5 text-sm rounded'
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

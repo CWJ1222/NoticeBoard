@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import BoardItem from './BoardItem';
+import Search from './Search';
 
 interface Post {
-  id: number; 
+  id: number;
   title: string;
   content: string;
   coin: number;
@@ -15,11 +16,12 @@ const BoardList = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10); // 페이지 당 보여질 포스트 수
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/board');
+        const res = await fetch(`/api/board?query=${encodeURIComponent(query)}`);
         if (!res.ok) {
           throw new Error('Failed to fetch posts');
         }
@@ -33,7 +35,7 @@ const BoardList = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [query]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -66,6 +68,7 @@ const BoardList = () => {
 
   return (
     <div>
+      <Search onSearch={setQuery} />
       {currentPosts.map((post) => (
         <BoardItem key={post.id} post={post} />
       ))}
