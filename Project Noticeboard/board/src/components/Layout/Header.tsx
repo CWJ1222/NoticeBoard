@@ -137,7 +137,7 @@ const Header: React.FC = () => {
                     <strong>Joined:</strong>
                     {''}
                     {new Date(
-                      new Date(user.created_at).getTime() + 9 * 60 * 60 * 1000
+                      new Date(user.created_at).getTime()
                     ).toLocaleString('ko-KR')}{' '}
                   </p>
                   <button

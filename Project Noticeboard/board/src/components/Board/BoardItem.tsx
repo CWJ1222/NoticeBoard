@@ -103,7 +103,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ post }) => {
           <p className='text-sm text-gray-500'>
             <strong>Created at:</strong>
             {new Date(
-              new Date(post.created_at).getTime() + 9 * 60 * 60 * 1000
+              new Date(post.created_at).getTime()
             ).toLocaleString('ko-KR')}
           </p>
           <div className='flex justify-between items-center mt-2'>
