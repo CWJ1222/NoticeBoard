@@ -2,11 +2,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import { loadTossPayments } from "@tosspayments/payment-sdk";
 
-const PaymentModal = ({ onClose }) => {
-  const handlePayment = (amount) => {
+interface PaymentModalProps {
+  onClose: () => void;
+  onPaymentSelect: (amount: number) => void;
+}
+
+const PaymentModal: React.FC<PaymentModalProps> = ({ onClose, onPaymentSelect }) => {
+  const handlePayment = (amount: number) => {
     alert(`${amount}원 selected`);
     onClose();
+    onPaymentSelect(amount);
   };
 
   return (
@@ -48,17 +55,42 @@ const PaymentModal = ({ onClose }) => {
   );
 };
 
-const Header = () => {
+const Header: React.FC = () => {
   const router = useRouter();
   const { user, signOut } = useAuth();
   const [showInfo, setShowInfo] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentAmount, setPaymentAmount] = useState<number | null>(null);
 
   const handleSignOut = async () => {
     await signOut();
     alert('로그아웃 되었습니다.');
     router.push('/');
   };
+
+  const handlePaymentSelect = (amount: number) => {
+    setPaymentAmount(amount);
+    setShowPaymentModal(false);
+    handleClick(amount); // Call handleClick with the selected amount
+  };
+
+  const handleClick = async (amount: number) => {
+    const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
+
+    if (!clientKey) {
+      throw new Error("NEXT_PUBLIC_TOSS_CLIENT_KEY is not defined");
+    }
+
+    const tossPayments = await loadTossPayments(clientKey);
+    await tossPayments.requestPayment("카드", {
+      amount: amount,
+      orderId: Math.random().toString(36).slice(2),
+      orderName: `${amount / 10}코인`,
+      successUrl: `${window.location.origin}/api/payments/payments?email=${user?.email}`,
+      failUrl: `${window.location.origin}/api/payments/fail`,
+    });
+  };
+
   return (
     <header className='bg-gray-800 text-white p-4'>
       <nav className='flex justify-between container mx-auto'>
@@ -71,7 +103,12 @@ const Header = () => {
               Board
             </a>
           </Link>
-          <a
+
+        </div>
+        <div className='flex items-center'>
+          {user ? (
+            <div className='relative'>
+                        <a
             className='mr-4'
             style={{ color: 'orange' }}
             onClick={() => setShowPaymentModal(true)}
@@ -79,10 +116,6 @@ const Header = () => {
           >
             Payment
           </a>
-        </div>
-        <div className='flex items-center'>
-          {user ? (
-            <div className='relative'>
               <button
                 onClick={() => setShowInfo((prev) => !prev)}
                 className='bg-blue-500 text-white px-2 py-1 rounded'
@@ -128,9 +161,7 @@ const Header = () => {
           )}
         </div>
       </nav>
-      {showPaymentModal && (
-        <PaymentModal onClose={() => setShowPaymentModal(false)} />
-      )}
+      {showPaymentModal && <PaymentModal onClose={() => setShowPaymentModal(false)} onPaymentSelect={handlePaymentSelect} />}
     </header>
   );
 };
