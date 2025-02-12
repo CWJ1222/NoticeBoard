@@ -1,0 +1,7 @@
+CREATE DATABASE seocho;
+
+CREATE USER 'seocho'@'%' IDENTIFIED BY 'seocho1234!';
+
+GRANT ALL PRIVILEGES ON seocho.* TO 'seocho'@'%';
+
+FLUSH PRIVILEGES;

@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import connection from '../../../utils/db';
 
 async function updateCoin(email: string, amount: number) {
   const query = 'UPDATE users SET coin = coin + ? WHERE email = ?';
-  const values = [amount/10, email];
+  const values = [amount / 10, email];
 
   try {
     const [rows] = await connection.execute(query, values);
@@ -25,17 +25,22 @@ export default async function handler(
 
   console.log('결제완료 페이지'); // 로그 확인을 위해 추가
 
-  if (typeof orderId !== "string" || typeof paymentKey !== "string" || typeof amount !== "string" || typeof email !== "string") {
-    res.status(400).json({ error: "Invalid query parameters" });
+  if (
+    typeof orderId !== 'string' ||
+    typeof paymentKey !== 'string' ||
+    typeof amount !== 'string' ||
+    typeof email !== 'string'
+  ) {
+    res.status(400).json({ error: 'Invalid query parameters' });
     return;
   }
 
-  const url = "https://api.tosspayments.com/v1/payments/confirm";
-  const basicToken = Buffer.from(`${secretKey}:`, "utf-8").toString("base64");
+  const url = 'https://api.tosspayments.com/v1/payments/confirm';
+  const basicToken = Buffer.from(`${secretKey}:`, 'utf-8').toString('base64');
 
   try {
     const response = await fetch(url, {
-      method: "post",
+      method: 'post',
       body: JSON.stringify({
         amount,
         orderId,
@@ -43,7 +48,7 @@ export default async function handler(
       }),
       headers: {
         Authorization: `Basic ${basicToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -62,13 +67,13 @@ export default async function handler(
       console.log('Coin updated successfully');
     } catch (error) {
       console.error('Failed to update coin:', error);
-      res.status(500).json({ error: "Failed to update coin" });
+      res.status(500).json({ error: 'Failed to update coin' });
       return;
     }
 
     res.redirect(`http://localhost:3000/board`);
   } catch (error) {
     console.error('Internal Server Error:', error); // 내부 서버 오류 로그
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
